@@ -5,7 +5,7 @@ tic
 clear;
 clc
 
-channNum = 2e4;
+channNum = 10;%2e4;
 rng(3); % control the random seed for randn, randi, rand
 
 %% Parameters setup
@@ -59,16 +59,15 @@ minRate_maxMin = zeros(length(dB_gamma0), 1);
 
 parfor ind = 1 : length(dB_gamma0)
     gamma0 = 10^(dB_gamma0(ind)/10);
-    %% Generate traffic on the highway
-    d0 = sqrt(radius^2-disBstoHwy^2);
-    [genFlag,vehPos,indCUE,indDUE,indDUE2] = genCUEandDUE(d0, laneWidth, numLane, disBstoHwy, d_avg_, numCUE, numDUE);
-    if genFlag == 1
-            continue; % generated vehicles are not enough to perform simulation, jump to the next iteration.
-    end
+ 
     cntChann = 0; % channel realization counter
-    
     while cntChann < channNum
-        
+        %% Generate traffic on the highway
+        d0 = sqrt(radius^2-disBstoHwy^2);
+        [genFlag,vehPos,indCUE,indDUE,indDUE2] = genCUEandDUE(d0, laneWidth, numLane, disBstoHwy, d_avg_, numCUE, numDUE);
+        if genFlag == 1
+            continue; % generated vehicles are not enough to perform simulation, jump to the next iteration.
+        end
         
         %% random large-scale fading generation
         alpha_mB_ = zeros(1, numCUE);
@@ -189,16 +188,15 @@ minRate_maxMin2 = zeros(length(dB_gamma0), 1);
 %%
 parfor ind = 1 : length(dB_gamma0)
     gamma0 = 10^(dB_gamma0(ind)/10);
-    %% Generate traffic on the highway
-    d0 = sqrt(radius^2-disBstoHwy^2);
-    [genFlag,vehPos,indCUE,indDUE,indDUE2] = genCUEandDUE(d0, laneWidth, numLane, disBstoHwy, d_avg_, numCUE,numDUE);
-    if genFlag == 1
-            continue; % generated vehicles are not enough to perform simulation, jump to the next iteration.
-    end
-        
+    
     cntChann = 0; % channel realization counter
     while cntChann < channNum
-        
+        %% Generate traffic on the highway
+        d0 = sqrt(radius^2-disBstoHwy^2);
+        [genFlag,vehPos,indCUE,indDUE,indDUE2] = genCUEandDUE(d0, laneWidth, numLane, disBstoHwy, d_avg_, numCUE,numDUE);
+        if genFlag == 1
+            continue; % generated vehicles are not enough to perform simulation, jump to the next iteration.
+        end
         
         %% random large-scale fading generation
         alpha_mB_ = zeros(1, numCUE);
