@@ -5,7 +5,7 @@ tic
 clear;
 clc
 
-channNum = 10;%2e4;
+channNum = 1000;%1e4;
 rng(3); % control the random seed for randn, randi, rand
 
 %% Parameters setup
