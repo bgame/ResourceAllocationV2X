@@ -6,7 +6,6 @@ function [ sumVal, minVal ] = sumAndMin( capMat, assignment )
 %           corresponding to the chosen elements
 % Output: sumVal, the sum value of all chosen elements
 %         minVal, the minimum value of all chosen elements
-%  By Le Liang, Georgia Tech, July 29, 2016
 
 vec = zeros(length(assignment), 1);
 M = size(capMat, 1);

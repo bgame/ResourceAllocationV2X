@@ -8,7 +8,6 @@ function [ combinedPL ] = genPL(linkType, stdShadow, dist, hgtTX, hgtRX, freq)
 %        freq, carrier frequency in GHz
 % Output: combinedPL, combined large scale fading value (pathloss +
 % shadow) in dB
-% By Le Liang, Georgia Tech, July 10, 2016
 
 if strcmp(upper(linkType), 'V2V')
     d_bp = 4*(hgtTX-1)*(hgtRX-1)*freq*10^9/(3*10^8);

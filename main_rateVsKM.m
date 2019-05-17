@@ -1,13 +1,11 @@
 % main function for D2D-based vehicular communications
 % Compare sum/min ergodic capacity against varying vehicle velocity.
 
-% By Le Liang, Georgia Tech, Jan. 26, 2017
-
 tic
 clear;
 clc
 
-channNum = 2e4;
+channNum = 1e4;
 rng(3); % control the random seed for randn, randi, rand
 
 %% Parameters setup

@@ -1,8 +1,6 @@
 % main function for D2D-based vehicular communications
 % Compare sum/min ergodic capacity against varying vehicle velocity.
 
-% By Le Liang, Georgia Tech, Jan. 26, 2017
-
 tic
 clear;
 clc

@@ -14,7 +14,6 @@ function [Flag,vehPos,indCUE,indDUE,indDUE2] = genCUEandDUE(d0, laneWidth, numLa
 %         indDUE2, numDUEx1, storing indices of corresponding DUE receiver,
 %                             closest to the DUEs stored in indDUE. 
 
-% By Le Liang, Georgia Tech, Jan. 25, 2017
 
 vehPos = []; % initilizer for vehicle position
 indCUE = [];

@@ -2,7 +2,6 @@ function [ assignment, minCapacity ] = maxMin( capacityMat )
 %MAXMIN Algorithm for linear assignment problem which maximizes the minimum
 %value of the assignment, rather than the max sum using Hungarian
 %   Definition similar to [assignment, cost] = munkres(costMat)
-% By Le Liang, Georgia Tech, July 29, 2016
 
 
 [M, K] = size(capacityMat);
