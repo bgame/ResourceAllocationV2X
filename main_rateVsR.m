@@ -5,7 +5,7 @@ tic
 clear;
 clc
 
-channNum = 1000;%1e4;
+channNum = 2e4;
 rng(3); % control the random seed for randn, randi, rand
 
 %% Parameters setup
@@ -18,7 +18,7 @@ stdV2V = 3; % shadowing std deviation
 stdV2I = 8;
 
 % cell parameter setup
-freq = 20; % carrier frequency 2 GHz
+freq = 2; % carrier frequency 2 GHz
 radius = 500; % cell radius in meters
 bsHgt = 25; % BS height in meters
 disBstoHwy = 35; % BS-highway distance in meters
@@ -36,6 +36,7 @@ d_avg_ = 2.5.*v/3.6; % average inter-vehicle distance according to TR 36.885
 
 % QoS parameters for CUE and DUE
 r0 = 0.5; % min rate for CUE in bps/Hz
+%dB_gamma0 = 5; % SINR_min for DUE in dB
 dB_gamma0 = 0:4:20; % SINR_min for DUE in dB
 p0 = 0.001; % outage probability for DUE
 dB_sig2 = -114; % noise power in dBm
@@ -43,7 +44,7 @@ dB_sig2 = -114; % noise power in dBm
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% dB to linear scale conversion
 sig2 = 10^(dB_sig2/10);
-%gamma0_ = 10^(dB_gamma0/10);
+gamma0 = 10.^(dB_gamma0/10);
 Pd_max = 10^(dB_Pd_max/10);
 Pc_max = 10^(dB_Pc_max/10);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -57,14 +58,14 @@ sumRate_maxMin = zeros(length(dB_gamma0), 1);
 minRate_maxMin = zeros(length(dB_gamma0), 1);
 %%
 
-parfor ind = 1 : length(dB_gamma0)
-    gamma0 = 10^(dB_gamma0(ind)/10);
- 
+parfor ind = 1 : length(gamma0)
+    d_avg = d_avg_;
+    
     cntChann = 0; % channel realization counter
     while cntChann < channNum
         %% Generate traffic on the highway
         d0 = sqrt(radius^2-disBstoHwy^2);
-        [genFlag,vehPos,indCUE,indDUE,indDUE2] = genCUEandDUE(d0, laneWidth, numLane, disBstoHwy, d_avg_, numCUE, numDUE);
+        [genFlag,vehPos,indCUE,indDUE,indDUE2] = genCUEandDUE(d0, laneWidth, numLane, disBstoHwy, d_avg, numCUE, numDUE);
         if genFlag == 1
             continue; % generated vehicles are not enough to perform simulation, jump to the next iteration.
         end
@@ -111,19 +112,19 @@ parfor ind = 1 : length(dB_gamma0)
                 alpha_kB = alpha_kB_(k);
                 alpha_mk = alpha_mk_(m,k);
                 
-                Pc_dmax = alpha_k*Pd_max/(gamma0*alpha_mk)*(exp(-gamma0*sig2/(Pd_max*alpha_k))/(1-p0)-1);
+                Pc_dmax = alpha_k*Pd_max/(gamma0(ind)*alpha_mk)*(exp(-gamma0(ind)*sig2/(Pd_max*alpha_k))/(1-p0)-1);
                 if Pc_dmax <= Pc_max
                     Pd_opt = Pd_max;
                     Pc_opt = Pc_dmax;
                 else
                     %% Bisectin search to find Pd_cmax
                     epsi = 1e-5;
-                    Pd_left = -gamma0*sig2/(alpha_k*log(1-p0)); % P_{k,min}^d
+                    Pd_left = -gamma0(ind)*sig2/(alpha_k*log(1-p0)); % P_{k,min}^d
                     Pd_right = Pd_max;
                     tmpVeh = 0;
                     while Pd_right - Pd_left > epsi
                         tmpVeh = (Pd_left + Pd_right)/2;
-                        if alpha_k*tmpVeh/(gamma0*alpha_mk)*(exp(-gamma0*sig2/(tmpVeh*alpha_k))/(1-p0)-1) > Pc_max
+                        if alpha_k*tmpVeh/(gamma0(ind)*alpha_mk)*(exp(-gamma0(ind)*sig2/(tmpVeh*alpha_k))/(1-p0)-1) > Pc_max
                             Pd_right = tmpVeh;
                         else
                             Pd_left = tmpVeh;
@@ -167,7 +168,6 @@ parfor ind = 1 : length(dB_gamma0)
     
 end
 
-%{
 sumRate_maxSum = sumRate_maxSum/channNum;
 minRate_maxSum = minRate_maxSum/channNum;
 sumRate_maxMin = sumRate_maxMin/channNum;
@@ -187,14 +187,14 @@ minRate_maxSum2 = zeros(length(dB_gamma0), 1);
 sumRate_maxMin2 = zeros(length(dB_gamma0), 1);
 minRate_maxMin2 = zeros(length(dB_gamma0), 1);
 %%
-parfor ind = 1 : length(dB_gamma0)
-    gamma0 = 10^(dB_gamma0(ind)/10);
+parfor ind = 1 : length(gamma0)
+    d_avg = d_avg_;
     
     cntChann = 0; % channel realization counter
     while cntChann < channNum
         %% Generate traffic on the highway
         d0 = sqrt(radius^2-disBstoHwy^2);
-        [genFlag,vehPos,indCUE,indDUE,indDUE2] = genCUEandDUE(d0, laneWidth, numLane, disBstoHwy, d_avg_, numCUE,numDUE);
+        [genFlag,vehPos,indCUE,indDUE,indDUE2] = genCUEandDUE(d0, laneWidth, numLane, disBstoHwy, d_avg, numCUE,numDUE);
         if genFlag == 1
             continue; % generated vehicles are not enough to perform simulation, jump to the next iteration.
         end
@@ -241,19 +241,19 @@ parfor ind = 1 : length(dB_gamma0)
                 alpha_kB = alpha_kB_(k);
                 alpha_mk = alpha_mk_(m,k);
                 
-                Pc_dmax = alpha_k*Pd_max/(gamma0*alpha_mk)*(exp(-gamma0*sig2/(Pd_max*alpha_k))/(1-p0)-1);
+                Pc_dmax = alpha_k*Pd_max/(gamma0(ind)*alpha_mk)*(exp(-gamma0(ind)*sig2/(Pd_max*alpha_k))/(1-p0)-1);
                 if Pc_dmax <= Pc_max
                     Pd_opt = Pd_max;
                     Pc_opt = Pc_dmax;
                 else
                     %% Bisectin search to find Pd_cmax
                     epsi = 1e-5;
-                    Pd_left = -gamma0*sig2/(alpha_k*log(1-p0)); % P_{k,min}^d
+                    Pd_left = -gamma0(ind)*sig2/(alpha_k*log(1-p0)); % P_{k,min}^d
                     Pd_right = Pd_max;
                     tmpVeh = 0;
                     while Pd_right - Pd_left > epsi
                         tmpVeh = (Pd_left + Pd_right)/2;
-                        if alpha_k*tmpVeh/(gamma0*alpha_mk)*(exp(-gamma0*sig2/(tmpVeh*alpha_k))/(1-p0)-1) > Pc_max
+                        if alpha_k*tmpVeh/(gamma0(ind)*alpha_mk)*(exp(-gamma0(ind)*sig2/(tmpVeh*alpha_k))/(1-p0)-1) > Pc_max
                             Pd_right = tmpVeh;
                         else
                             Pd_left = tmpVeh;
@@ -300,7 +300,7 @@ sumRate_maxSum2 = sumRate_maxSum2/channNum;
 minRate_maxSum2 = minRate_maxSum2/channNum;
 sumRate_maxMin2 = sumRate_maxMin2/channNum;
 minRate_maxMin2 = minRate_maxMin2/channNum;
-%}
+
 
 %%
 LineWidth = 1.5;
@@ -310,13 +310,13 @@ plot(dB_gamma0, sumRate_maxSum, 'k-s', 'LineWidth', LineWidth, 'MarkerSize', Mar
 hold on
 plot(dB_gamma0, sumRate_maxMin, 'b-o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
 hold on
-%plot(dB_gamma0, sumRate_maxSum2, 'k--s', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
-%hold on
-%plot(dB_gamma0, sumRate_maxMin2, 'b--o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
+plot(dB_gamma0, sumRate_maxSum2, 'k--s', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
+hold on
+plot(dB_gamma0, sumRate_maxMin2, 'b--o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
 grid on
 legend('P_{max}^c = 23 dBm, Algorithm 1', 'P_{max}^c = 23 dBm, Algorithm 2',...
 'P_{max}^c = 17 dBm, Algorithm 1', 'P_{max}^c = 17 dBm, Algorithm 2')
-xlabel('$r_0^d$ (dB)', 'interpreter','latex')
+xlabel('$dB_gamma0$ R0d', 'interpreter','latex')
 ylabel('$\sum\limits_m C_m$ (bps/Hz)', 'interpreter','latex')
 % saveas(gcf, sprintf('sumRateVsSpeed')); % save current figure to file
 
@@ -325,13 +325,13 @@ plot(dB_gamma0, minRate_maxSum, 'k-s', 'LineWidth', LineWidth, 'MarkerSize', Mar
 hold on
 plot(dB_gamma0, minRate_maxMin, 'b-o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
 hold on
-%plot(dB_gamma0, minRate_maxSum2, 'k--s', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
-%hold on
-%plot(dB_gamma0, minRate_maxMin2, 'b--o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
+plot(dB_gamma0, minRate_maxSum2, 'k--s', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
+hold on
+plot(dB_gamma0, minRate_maxMin2, 'b--o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
 grid on
 legend('P_{max}^c = 23 dBm, Algorithm 1', 'P_{max}^c = 23 dBm, Algorithm 2',...
 'P_{max}^c = 17 dBm, Algorithm 1', 'P_{max}^c = 17 dBm, Algorithm 2')
-xlabel('$r_0^d$ (dB)', 'interpreter','latex')
+xlabel('$dB_gamma0$ R0d', 'interpreter','latex')
 ylabel('$\min C_m$ (bps/Hz)', 'interpreter','latex')
 % saveas(gcf, 'minRateVsSpeed'); % save current figure to file
 
