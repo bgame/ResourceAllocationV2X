@@ -300,7 +300,7 @@ sumRate_maxSum2 = sumRate_maxSum2/channNum;
 minRate_maxSum2 = minRate_maxSum2/channNum;
 sumRate_maxMin2 = sumRate_maxMin2/channNum;
 minRate_maxMin2 = minRate_maxMin2/channNum;
-%}
+
 
 %%
 LineWidth = 1.5;
@@ -310,9 +310,9 @@ plot(dB_gamma0, sumRate_maxSum, 'k-s', 'LineWidth', LineWidth, 'MarkerSize', Mar
 hold on
 plot(dB_gamma0, sumRate_maxMin, 'b-o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
 hold on
-%plot(dB_gamma0, sumRate_maxSum2, 'k--s', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
-%hold on
-%plot(dB_gamma0, sumRate_maxMin2, 'b--o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
+plot(dB_gamma0, sumRate_maxSum2, 'k--s', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
+hold on
+plot(dB_gamma0, sumRate_maxMin2, 'b--o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
 grid on
 legend('P_{max}^c = 23 dBm, Algorithm 1', 'P_{max}^c = 23 dBm, Algorithm 2',...
 'P_{max}^c = 17 dBm, Algorithm 1', 'P_{max}^c = 17 dBm, Algorithm 2')
@@ -325,9 +325,9 @@ plot(dB_gamma0, minRate_maxSum, 'k-s', 'LineWidth', LineWidth, 'MarkerSize', Mar
 hold on
 plot(dB_gamma0, minRate_maxMin, 'b-o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
 hold on
-%plot(dB_gamma0, minRate_maxSum2, 'k--s', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
-%hold on
-%plot(dB_gamma0, minRate_maxMin2, 'b--o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
+plot(dB_gamma0, minRate_maxSum2, 'k--s', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
+hold on
+plot(dB_gamma0, minRate_maxMin2, 'b--o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
 grid on
 legend('P_{max}^c = 23 dBm, Algorithm 1', 'P_{max}^c = 23 dBm, Algorithm 2',...
 'P_{max}^c = 17 dBm, Algorithm 1', 'P_{max}^c = 17 dBm, Algorithm 2')

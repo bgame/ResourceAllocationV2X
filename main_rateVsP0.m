@@ -184,7 +184,7 @@ ind = [1,2,3];
 plot(ind, sumRate_maxSum, 'k-s', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
 hold on
 plot(ind, sumRate_maxMin, 'b-o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
-hold on
+grid on
 legend('Algorithm 1', 'Algorithm 2')
 xlabel('$KMs$ (p0)', 'interpreter','latex')
 ylabel('$\sum\limits_m C_m$ (bps/Hz)', 'interpreter','latex')
@@ -196,7 +196,7 @@ figure
 plot(ind, minRate_maxSum, 'k-s', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
 hold on
 plot(ind, minRate_maxMin, 'b-o', 'LineWidth', LineWidth, 'MarkerSize', MarkerSize)
-hold on
+grid on
 legend('Algorithm 1', 'Algorithm 2')
 xlabel('$KMs$ (p0)', 'interpreter','latex')
 ylabel('$\min C_m$ (bps/Hz)', 'interpreter','latex')
