@@ -31,7 +31,7 @@ vehNoiseFigure = 9; % vehicle noise figure 9 dB
 
 numLane = 6;
 laneWidth = 4;
-v = 70; % velocity
+v = 60; % velocity
 d_avg_ = 2.5.*v/3.6; % average inter-vehicle distance according to TR 36.885
 
 % QoS parameters for CUE and DUE
@@ -316,7 +316,7 @@ plot(dB_gamma0, sumRate_maxMin2, 'b--o', 'LineWidth', LineWidth, 'MarkerSize', M
 grid on
 legend('P_{max}^c = 23 dBm, Algorithm 1', 'P_{max}^c = 23 dBm, Algorithm 2',...
 'P_{max}^c = 17 dBm, Algorithm 1', 'P_{max}^c = 17 dBm, Algorithm 2')
-xlabel('$dB_gamma0$ R0d', 'interpreter','latex')
+xlabel('$r_{0}^d$ (dB)', 'interpreter','latex')
 ylabel('$\sum\limits_m C_m$ (bps/Hz)', 'interpreter','latex')
 % saveas(gcf, sprintf('sumRateVsSpeed')); % save current figure to file
 
@@ -331,7 +331,7 @@ plot(dB_gamma0, minRate_maxMin2, 'b--o', 'LineWidth', LineWidth, 'MarkerSize', M
 grid on
 legend('P_{max}^c = 23 dBm, Algorithm 1', 'P_{max}^c = 23 dBm, Algorithm 2',...
 'P_{max}^c = 17 dBm, Algorithm 1', 'P_{max}^c = 17 dBm, Algorithm 2')
-xlabel('$dB_gamma0$ R0d', 'interpreter','latex')
+xlabel('$r_{0}^d$ (dB)', 'interpreter','latex')
 ylabel('$\min C_m$ (bps/Hz)', 'interpreter','latex')
 % saveas(gcf, 'minRateVsSpeed'); % save current figure to file
 
